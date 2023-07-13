@@ -1,18 +1,9 @@
 /*
  * Make nrf21540dk have the same FEM control as the BL5340PA.
  */
-
-fem_spi: &spi3 {
-    status = "disabled";
-	nrf_radio_fem_spi: nrf21540_fem_spi@0 {
-		status = "disabled";
-    };
-};
-
 / {
     nrf_radio_fem: nrf21540_fem {
         /delete-property/ ant-sel-gpios;
-        /delete-property/ spi-if;
     };
 
     /* Development board uses switch connectors (there are two internal antennas).

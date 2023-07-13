@@ -8,14 +8,22 @@ cmake_minimum_required(VERSION 3.20.0)
 if(MOCK_LCZ_FEM AND BOARD STREQUAL nrf5340dk_nrf5340_cpuapp
     AND hci_rpmsg_SHIELD STREQUAL nrf21540_ek)
     message("Mocking Laird Connectivity Zephyr FEM Driver on nrf5340dk")
-    list(APPEND hci_rpmsg_OVERLAY_CONFIG ${CMAKE_SOURCE_DIR}/boards/fem.conf)
+    list(APPEND hci_rpmsg_OVERLAY_CONFIG ${CMAKE_SOURCE_DIR}/fem.conf)
     list(APPEND hci_rpmsg_DTC_OVERLAY_FILE ${CMAKE_SOURCE_DIR}/child_image/mock_lcz_fem.nrf21540_ek.overlay)
+endif()
+
+# Make it easier to make FEM builds for multiple boards that are similar.
+# BL5340PA configuration can be specified in dts/board file or overlay.
+# (overlay takes precedence)
+#
+if(BOARD STREQUAL bl5340pa_dvk_cpuapp)
+    list(APPEND hci_rpmsg_OVERLAY_CONFIG ${CMAKE_SOURCE_DIR}/fem.conf)  
 endif()
 
 if(MOCK_LCZ_FEM AND BOARD STREQUAL nrf21540dk_nrf52840)
     message("Mocking Laird Connectivity Zephyr FEM Driver on nrf21540dk")
-    list(APPEND OVERLAY_CONFIG ${CMAKE_SOURCE_DIR}/boards/fem.conf)
-    list(APPEND DTC_OVERLAY_FILE ${CMAKE_SOURCE_DIR}/boards/mock_lcz_fem.overlay)
+    list(APPEND OVERLAY_CONFIG ${CMAKE_SOURCE_DIR}/fem.conf)
+    list(APPEND DTC_OVERLAY_FILE ${CMAKE_SOURCE_DIR}/boards/mock_lcz_fem.nrf21540dk_nrf52840.overlay)
 endif()
 
 # Network cpu doesn't have low power uart control

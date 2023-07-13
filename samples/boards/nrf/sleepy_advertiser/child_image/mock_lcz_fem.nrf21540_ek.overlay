@@ -3,13 +3,6 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
  */
 
-fem_spi: &arduino_spi {
-    status = "disabled";
-    nrf_radio_fem_spi: nrf21540_fem_spi@0 {
-        status = "disabled";
-    };
-};
-
 &radio {
     fem = <&nrf_radio_fem>;
 };
@@ -17,7 +10,6 @@ fem_spi: &arduino_spi {
 / {
     nrf_radio_fem: nrf21540_fem {
         /delete-property/ ant-sel-gpios;
-        /delete-property/ spi-if;
     };
 
     /* When mocking, internal-antenna means use ant1 and external (default) means ant2 */
@@ -28,5 +20,6 @@ fem_spi: &arduino_spi {
         spi-mosi-gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;
         spi-csn-gpios = <&arduino_header 16 GPIO_ACTIVE_LOW>;
         spi-miso-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+        internal-antenna;
     };
 };
