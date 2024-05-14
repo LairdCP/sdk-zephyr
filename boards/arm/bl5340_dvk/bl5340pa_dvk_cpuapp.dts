@@ -7,11 +7,11 @@
 
 /dts-v1/;
 #include <nordic/nrf5340_cpuapp_qkaa.dtsi>
-#include "bl5340_dvk_cpuapp_common.dts"
+#include "bl5340_dvk_cpuapp_common.dtsi"
 
 / {
 	model = "Laird Connectivity BL5340PA (nRF5340 with nRF21540) Application";
-	compatible = "lairdconnectivity,bl5340pa-dvk-cpuapp";
+	compatible = "lairdconnect,bl5340pa-dvk-cpuapp";
 
 	chosen {
 		zephyr,sram = &sram0_image;

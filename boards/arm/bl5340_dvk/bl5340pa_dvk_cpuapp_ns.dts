@@ -11,7 +11,7 @@
 
 / {
 	model = "Laird Connectivity BL5340PA (nRF5340 with nRF21540) Application";
-	compatible = "lairdconnectivity,bl5340pa-dvk-cpuapp";
+	compatible = "lairdconnect,bl5340pa-dvk-cpuapp";
 
 	chosen {
 		zephyr,sram = &sram0_ns;
