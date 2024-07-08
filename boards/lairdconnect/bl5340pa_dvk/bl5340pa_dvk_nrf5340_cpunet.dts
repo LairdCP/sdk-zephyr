@@ -1,0 +1,85 @@
+/*
+ * Copyright (c) 2021-2024 Laird Connectivity
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <nordic/nrf5340_cpunet_qkaa.dtsi>
+#include "bl5340pa_dvk_nrf5340_cpunet-pinctrl.dtsi"
+#include "bl5340pa_dvk_nrf5340_cpunet_common.dtsi"
+
+/ {
+	model = "Laird Connectivity BL5340PA (nRF5340 with nRF21540) Network";
+	compatible = "lairdconnect,bl5340pa-dvk-cpunet";
+
+	chosen {
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		zephyr,uart-mcumgr = &uart0;
+		zephyr,bt-mon-uart = &uart0;
+		zephyr,bt-c2h-uart = &uart0;
+		zephyr,sram = &sram1;
+		zephyr,flash = &flash1;
+		zephyr,code-partition = &slot0_partition;
+		zephyr,bt-hci-ipc = &ipc0;
+	};
+
+	aliases {
+		watchdog0 = &wdt0;
+	};
+
+	nrf_radio_fem: nrf21540_fem {
+		compatible = "nordic,nrf21540-fem";
+		rx-en-gpios = <&gpio0 31 GPIO_ACTIVE_HIGH>;
+		tx-en-gpios = <&gpio0 30 GPIO_ACTIVE_HIGH>;
+		pdn-gpios = <&gpio0 29 GPIO_ACTIVE_HIGH>;
+		spi-if = <&nrf_radio_fem_spi>;
+		supply-voltage-mv = <3300>;
+	};
+
+	/* The Laird Connectivity driver that ensures regulatory compliance and
+	 * proper GPIO control requires the Nordic Connect SDK (MPSL FEM driver).
+	 * The default is external antenna and FCC/IC region.
+	 *
+	 * Add 'internal-antenna;' to use the internal antenna verison.
+	 * Change to'power-table = <1>;' for Australia/NZ.
+	 */
+	lcz_fem: nrf21540_lcz_fem  {
+		compatible = "lairdconnect,nrf21540-lcz-fem";
+		ant-sel-gpios = <&gpio0 4 GPIO_ACTIVE_HIGH>;
+		spi-clk-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		spi-mosi-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
+		spi-csn-gpios = <&gpio1 5 GPIO_ACTIVE_LOW>;
+		spi-miso-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
+		power-table = <0>;
+	};
+};
+
+&radio {
+	fem = <&nrf_radio_fem>;
+};
+
+/* Can't be used with SPI0/FEM */
+&uart0 {
+	status = "disabled";
+	current-speed = <115200>;
+	pinctrl-0 = <&uart0_default>;
+	pinctrl-1 = <&uart0_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&spi0 {
+	status = "okay";
+	cs-gpios = <&gpio1 5 GPIO_ACTIVE_LOW>;
+	pinctrl-0 = <&spi0_default>;
+	pinctrl-1 = <&spi0_sleep>;
+	pinctrl-names = "default", "sleep";
+	
+	nrf_radio_fem_spi: nrf21540_fem_spi@0 {
+		status = "okay";
+		compatible = "nordic,nrf21540-fem-spi";
+		reg = <0>;
+		spi-max-frequency = <8000000>;
+	};
+};
