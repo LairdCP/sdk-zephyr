@@ -1,5 +1,5 @@
-identifier: bl5340pa_dvk/nrf5340/cpuapp
-name: BL5340PA-DVK-application-MCU
+identifier: bl5340_dvk/nrf5340/cpuapp/pa
+name: bl5340_dvk_nrf5340_cpuapp_pa
 type: mcu
 arch: arm
 toolchain:
